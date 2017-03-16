@@ -22,24 +22,7 @@ class PersonTableViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
 
-        if UIAccessibilityIsReduceTransparencyEnabled() == false {
-            let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)
-
-            let vibrancyEffect = UIVibrancyEffect(blurEffect: blurEffect)
-            let vibrancyView = UIVisualEffectView(effect: vibrancyEffect)
-            vibrancyView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-
-            let blurEffectView = UIVisualEffectView(effect: blurEffect)
-            //always fill the view
-            blurEffectView.frame = backgroundNameView.bounds
-            blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-            backgroundNameView.insertSubview(blurEffectView, at: 0)
-
-            vibrancyView.frame = blurEffectView.bounds
-            blurEffectView.addSubview(vibrancyView)
-
-            backgroundNameView.backgroundColor = .clear
-        }
+        backgroundNameView.addBlurEffect()
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -51,27 +34,14 @@ class PersonTableViewCell: UITableViewCell {
     func setup(withPerson person: Person) {
         self.person = person
 
-        let image: UIImage
-        switch person.affiliationEnum() {
-        case .firstOrder:
-            image = UIImage(named: "placeholder_jedi")!
-        case .jedi:
-            image = UIImage(named: "placeholder_firstorder")!
-        case .resistance:
-            image = UIImage(named: "placeholder_resistance")!
-        case .sith:
-            image = UIImage(named: "placeholder_sith")!
-        }
-
+        let image = UIImage(affiliation: person.affiliationEnum())
         let url = URL(string: person.profilePicture)!
         let resouce = ImageResource(downloadURL: url)
         profileImageView.kf.setImage(with: resouce, placeholder: image, options: [.transition(.fade(0.2))])
-
 
         firstNameLabel.text = person.firstName
         lastNameLabel.text = person.lastName
         firstNameLabel.textColor = .white
         lastNameLabel.textColor = .white
     }
-
 }

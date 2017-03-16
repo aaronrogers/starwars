@@ -17,6 +17,7 @@
 		6C6172AD1E79941E00B16B4C /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6172AC1E79941E00B16B4C /* Person.swift */; };
 		6C6172AF1E7A334F00B16B4C /* PersonViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6172AE1E7A334F00B16B4C /* PersonViewController.swift */; };
 		6C6172B11E7A576A00B16B4C /* PersonTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6172B01E7A576A00B16B4C /* PersonTableViewCell.swift */; };
+		6C6172B31E7AEB2D00B16B4C /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6172B21E7AEB2D00B16B4C /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +34,7 @@
 		6C6172AC1E79941E00B16B4C /* Person.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
 		6C6172AE1E7A334F00B16B4C /* PersonViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersonViewController.swift; sourceTree = "<group>"; };
 		6C6172B01E7A576A00B16B4C /* PersonTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersonTableViewCell.swift; sourceTree = "<group>"; };
+		6C6172B21E7AEB2D00B16B4C /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		6F8CC60ED548F6D01E5EC3F3 /* Pods-StarWars.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StarWars.debug.xcconfig"; path = "Pods/Target Support Files/Pods-StarWars/Pods-StarWars.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -70,15 +72,16 @@
 			isa = PBXGroup;
 			children = (
 				6C6172961E7987C500B16B4C /* AppDelegate.swift */,
-				6C61729A1E7987C500B16B4C /* Main.storyboard */,
 				6C61729D1E7987C500B16B4C /* Assets.xcassets */,
-				6C61729F1E7987C500B16B4C /* LaunchScreen.storyboard */,
+				6C6172B21E7AEB2D00B16B4C /* Extensions.swift */,
 				6C6172A21E7987C500B16B4C /* Info.plist */,
-				6C6172A81E79892D00B16B4C /* PeopleTableViewController.swift */,
+				6C61729F1E7987C500B16B4C /* LaunchScreen.storyboard */,
+				6C61729A1E7987C500B16B4C /* Main.storyboard */,
 				6C6172AA1E79899800B16B4C /* PeopleManager.swift */,
+				6C6172A81E79892D00B16B4C /* PeopleTableViewController.swift */,
 				6C6172AC1E79941E00B16B4C /* Person.swift */,
-				6C6172AE1E7A334F00B16B4C /* PersonViewController.swift */,
 				6C6172B01E7A576A00B16B4C /* PersonTableViewCell.swift */,
+				6C6172AE1E7A334F00B16B4C /* PersonViewController.swift */,
 			);
 			path = StarWars;
 			sourceTree = "<group>";
@@ -230,6 +233,7 @@
 				6C6172AB1E79899800B16B4C /* PeopleManager.swift in Sources */,
 				6C6172AD1E79941E00B16B4C /* Person.swift in Sources */,
 				6C6172971E7987C500B16B4C /* AppDelegate.swift in Sources */,
+				6C6172B31E7AEB2D00B16B4C /* Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
