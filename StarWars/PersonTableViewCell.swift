@@ -65,7 +65,8 @@ class PersonTableViewCell: UITableViewCell {
 
         let url = URL(string: person.profilePicture)!
         let resouce = ImageResource(downloadURL: url)
-        profileImageView.kf.setImage(with: resouce, placeholder: image)
+        profileImageView.kf.setImage(with: resouce, placeholder: image, options: [.transition(.fade(0.2))])
+
 
         firstNameLabel.text = person.firstName
         lastNameLabel.text = person.lastName

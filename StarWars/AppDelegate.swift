@@ -8,6 +8,7 @@
 
 import UIKit
 import RealmSwift
+import Kingfisher
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-//        deleteDB()
+//        deleteCache()
         PeopleManager.shared.startup()
         return true
     }
@@ -44,7 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
-    private func deleteDB() {
+    private func deleteCache() {
         var config = Realm.Configuration()
 
         do {
@@ -53,6 +54,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } catch {
             print("Could not delete Realm file.\n Path \(config.fileURL!)\n error - ", error.localizedDescription)
         }
+
+        ImageCache.default.clearDiskCache()
+        ImageCache.default.clearMemoryCache()
     }
 
 }

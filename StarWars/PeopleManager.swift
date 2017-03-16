@@ -33,7 +33,9 @@ class PeopleManager {
     func startup() {
         let session = URLSession(configuration: URLSessionConfiguration.default)
         let url = URL(string: Constant.apiUrl)!
+        print("Fetching people at \(Constant.apiUrl)")
         let task = session.dataTask(with: url) { (data, response, error) in
+            print("Received response")
             DispatchQueue.global(qos: .background).async {
                 switch (data, error) {
                 case let (_, .some(error)):
