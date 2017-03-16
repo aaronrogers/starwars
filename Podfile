@@ -7,6 +7,7 @@ target 'StarWars' do
 
   # Pods for StarWars
   pod 'RealmSwift', '~> 2.4'
+  pod 'Kingfisher', '~> 3.0'
 end
 
 post_install do |installer|

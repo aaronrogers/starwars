@@ -8,6 +8,13 @@
 
 import RealmSwift
 
+enum Affiliation: String {
+    case resistance = "RESISTANCE"
+    case firstOrder = "FIRST_ORDER"
+    case sith = "SITH"
+    case jedi = "JEDI"
+}
+
 class Person: Object {
     dynamic var id = ""
     dynamic var firstName = ""
@@ -16,6 +23,10 @@ class Person: Object {
     dynamic var profilePicture = ""
     dynamic var forceSensitive = false
     dynamic var affiliation = ""
+
+    func affiliationEnum() -> Affiliation {
+        return Affiliation(rawValue: affiliation)!
+    }
 
     override static func primaryKey() -> String? {
         return "id"

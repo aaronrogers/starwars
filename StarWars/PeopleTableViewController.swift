@@ -29,11 +29,11 @@ class PeopleTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! PersonTableViewCell
 
         let person = people[indexPath.row]
 
-        cell.textLabel?.text = "\(person.firstName) \(person.lastName)"
+        cell.setup(withPerson: person)
 
         return cell
     }
