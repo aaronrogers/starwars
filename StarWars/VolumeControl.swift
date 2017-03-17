@@ -25,7 +25,6 @@ class VolumeControl: NSObject {
 
     fileprivate var initialVolume: Float!
     fileprivate var observing = false
-    fileprivate var volumeView: MPVolumeView?
     fileprivate var sessionAlreadyActive: Bool!
 
     private var volumeChangeTimer: Timer?
@@ -39,7 +38,6 @@ class VolumeControl: NSObject {
             return
         }
 
-        disableVolumeView()
         startObserving()
     }
 
@@ -47,7 +45,6 @@ class VolumeControl: NSObject {
         guard observing else { return }
 
         stopObserving()
-        enableVolumeView()
     }
 
 
@@ -105,19 +102,6 @@ extension VolumnControlPrivateMethods {
         let audioSession = AVAudioSession.sharedInstance()
         try? audioSession.setActive(false)
         audioSession.removeObserver(self, forKeyPath: Constant.outputVolumeKey)
-    }
-
-    fileprivate func disableVolumeView() {
-        if volumeView == nil {
-            volumeView = makeVolumeView()
-        }
-
-        UIApplication.shared.windows.first?.addSubview(volumeView!)
-    }
-
-    fileprivate func enableVolumeView() {
-        volumeView?.removeFromSuperview()
-        volumeView = nil
     }
 
     fileprivate func makeVolumeView() -> MPVolumeView {
