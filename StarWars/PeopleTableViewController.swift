@@ -12,10 +12,16 @@ import AVFoundation
 
 class PeopleTableViewController: UITableViewController {
 
+    private enum Constant {
+        static let showPerson = "showPerson"
+        static let doubleClickTolerance: TimeInterval = 0.3
+    }
+
     var notificationToken: NotificationToken? = nil
     var people: Results<Person>!
     var volumeControl: VolumeControl!
     var selectedIndex: Int?
+    var volumeTappedTimer: Timer?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,12 +36,11 @@ class PeopleTableViewController: UITableViewController {
         }
 
         volumeControl = VolumeControl()
-        volumeControl.watchForChange(volumeUp: { 
-            self.changeSelectedIndex(delta: -1)
+        volumeControl.watchForChange(volumeUp: {
+            self.volumeChanged(up: true)
         }, volumeDown: {
-            self.changeSelectedIndex(delta: 1)
+            self.volumeChanged(up: false)
         })
-
     }
 
     // MARK: - Table view data source
@@ -57,11 +62,11 @@ class PeopleTableViewController: UITableViewController {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard segue.identifier == "showPerson",
-            let vc = segue.destination as? PersonViewController,
-            let selectedPath = tableView.indexPathForSelectedRow
+        guard segue.identifier == Constant.showPerson,
+            let vc = segue.destination as? PersonViewController
             else { return }
 
+        let selectedPath = tableView.indexPathForSelectedRow!
         let person = people[selectedPath.row]
         vc.setup(withPerson: person)
     }
@@ -90,6 +95,31 @@ class PeopleTableViewController: UITableViewController {
         }
     }
 
+    private func volumeChanged(up: Bool) {
+        if let timer = volumeTappedTimer {
+            timer.invalidate()
+            self.volumeTappedTimer = nil
+            selectCurrent()
+            return
+        }
+
+        volumeTappedTimer = Timer.scheduledTimer(withTimeInterval: Constant.doubleClickTolerance, repeats: false, block: { timer in
+            self.volumeTappedTimer = nil
+            if up {
+                self.changeSelectedIndex(delta: -1)
+            } else {
+                self.changeSelectedIndex(delta: 1)
+            }
+        })
+    }
+
+    private func selectCurrent() {
+        if tableView.indexPathForSelectedRow == nil {
+            tableView.selectRow(at: IndexPath(row: selectedIndex ?? 0, section: 0), animated: true, scrollPosition: .middle)
+        }
+        performSegue(withIdentifier: Constant.showPerson, sender: tableView)
+    }
+
     func changeSelectedIndex(delta: Int) {
         // don't want to react while it's not the main view
         guard isViewLoaded && view.window != nil else { return }
@@ -115,9 +145,8 @@ class PeopleTableViewController: UITableViewController {
             newIndex = people.count - 1
         }
 
-
         self.selectedIndex = newIndex
-        tableView.scrollToRow(at: IndexPath(row: newIndex, section: 0), at: .middle, animated: true)
+        tableView.selectRow(at: IndexPath(row: newIndex, section: 0), animated: true, scrollPosition: .middle)
     }
 
 }
