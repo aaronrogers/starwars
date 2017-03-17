@@ -10,8 +10,12 @@ import Foundation
 import AVFoundation
 import MediaPlayer
 
+extension Notification.Name {
+    static let volumeUp = Notification.Name("VolumeControlVolumeUp")
+    static let volumeDown = Notification.Name("VolummeControlVolumeDown")
+    static let volumeDoubleTapped = Notification.Name("VolumeControlDoubleTapped")
+}
 
-typealias VolumeBlock = () -> ()
 class VolumeControl: NSObject {
 
     fileprivate enum Constant {
@@ -19,21 +23,33 @@ class VolumeControl: NSObject {
         static let volumeKey = "volume"
     }
 
-    fileprivate var volumeUpCallback: VolumeBlock?
-    fileprivate var volumeDownCallback: VolumeBlock?
     fileprivate var initialVolume: Float!
     fileprivate var observing = false
     fileprivate var volumeView: MPVolumeView?
+    fileprivate var sessionAlreadyActive: Bool!
 
-    func watchForChange(volumeUp: @escaping VolumeBlock, volumeDown: @escaping VolumeBlock) {
-        self.volumeUpCallback = volumeUp
-        self.volumeDownCallback = volumeDown
-        enable()
+    private var volumeChangeTimer: Timer?
+
+    static let shared = VolumeControl()
+
+    private override init() {}
+
+    func enable() {
+        guard observing == false else {
+            return
+        }
+
+        disableVolumeView()
+        startObserving()
     }
 
-    deinit {
-        disable()
+    func disable() {
+        guard observing else { return }
+
+        stopObserving()
+        enableVolumeView()
     }
+
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
 
@@ -53,10 +69,20 @@ class VolumeControl: NSObject {
         // reset value
         MPMusicPlayerController.applicationMusicPlayer().setValue(NSNumber(value: initialVolume), forKey: Constant.volumeKey)
 
-        if delta > 0 {
-            volumeUpCallback?()
+
+        if let timer = volumeChangeTimer {
+            timer.invalidate()
+            self.volumeChangeTimer = nil
+            NotificationCenter.default.post(name: .volumeDoubleTapped, object: self)
         } else {
-            volumeDownCallback?()
+            volumeChangeTimer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false, block: { _ in
+                self.volumeChangeTimer = nil
+                if delta > 0 {
+                    NotificationCenter.default.post(name: .volumeUp, object: self)
+                } else {
+                    NotificationCenter.default.post(name: .volumeDown, object: self)
+                }
+            })
         }
     }
 
@@ -64,23 +90,8 @@ class VolumeControl: NSObject {
 
 private typealias VolumnControlPrivateMethods = VolumeControl
 extension VolumnControlPrivateMethods {
-    fileprivate func enable() {
-        guard observing == false else {
-            return
-        }
 
-        disableVolumeView()
-        startObserving()
-    }
-
-    fileprivate func disable() {
-        guard observing else { return }
-
-        stopObserving()
-        enableVolumeView()
-    }
-
-    private func startObserving() {
+    fileprivate func startObserving() {
         let audioSession = AVAudioSession.sharedInstance()
 
         try? audioSession.setActive(true)
@@ -90,13 +101,13 @@ extension VolumnControlPrivateMethods {
         observing = true
     }
 
-    private func stopObserving() {
+    fileprivate func stopObserving() {
         let audioSession = AVAudioSession.sharedInstance()
         try? audioSession.setActive(false)
         audioSession.removeObserver(self, forKeyPath: Constant.outputVolumeKey)
     }
 
-    private func disableVolumeView() {
+    fileprivate func disableVolumeView() {
         if volumeView == nil {
             volumeView = makeVolumeView()
         }
@@ -104,7 +115,7 @@ extension VolumnControlPrivateMethods {
         UIApplication.shared.windows.first?.addSubview(volumeView!)
     }
 
-    private func enableVolumeView() {
+    fileprivate func enableVolumeView() {
         volumeView?.removeFromSuperview()
         volumeView = nil
     }

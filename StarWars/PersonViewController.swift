@@ -40,9 +40,16 @@ class PersonViewController: UIViewController {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .full
         birthdateLabel.text = dateFormatter.string(from: person.birthDate)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(doubleTapVolume(notification:)), name: .volumeDoubleTapped, object: nil)
+    }
+
+    func doubleTapVolume(notification: NSNotification) {
+        _ = navigationController?.popViewController(animated: true)
     }
 
     func setup(withPerson person: Person) {
         self.person = person
     }
+
 }

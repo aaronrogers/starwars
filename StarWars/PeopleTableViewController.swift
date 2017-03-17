@@ -19,9 +19,7 @@ class PeopleTableViewController: UITableViewController {
 
     var notificationToken: NotificationToken? = nil
     var people: Results<Person>!
-    var volumeControl: VolumeControl!
     var selectedIndex: Int?
-    var volumeTappedTimer: Timer?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,12 +33,28 @@ class PeopleTableViewController: UITableViewController {
             self?.handleNotificationChanges(changes)
         }
 
-        volumeControl = VolumeControl()
-        volumeControl.watchForChange(volumeUp: {
-            self.volumeChanged(up: true)
-        }, volumeDown: {
-            self.volumeChanged(up: false)
-        })
+        NotificationCenter.default.addObserver(self, selector: #selector(volUp(notification:)), name: .volumeUp, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(volDown(notification:)), name: .volumeDown, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(doubleTapVolume(notification:)), name: .volumeDoubleTapped, object: nil)
+
+        VolumeControl.shared.enable()
+
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
+    func volUp(notification: NSNotification) {
+        changeSelectedIndex(delta: -1)
+    }
+
+    func volDown(notification: NSNotification) {
+        changeSelectedIndex(delta: 1)
+    }
+
+    func doubleTapVolume(notification: NSNotification) {
+        selectCurrent()
     }
 
     // MARK: - Table view data source
@@ -95,25 +109,10 @@ class PeopleTableViewController: UITableViewController {
         }
     }
 
-    private func volumeChanged(up: Bool) {
-        if let timer = volumeTappedTimer {
-            timer.invalidate()
-            self.volumeTappedTimer = nil
-            selectCurrent()
-            return
-        }
-
-        volumeTappedTimer = Timer.scheduledTimer(withTimeInterval: Constant.doubleClickTolerance, repeats: false, block: { timer in
-            self.volumeTappedTimer = nil
-            if up {
-                self.changeSelectedIndex(delta: -1)
-            } else {
-                self.changeSelectedIndex(delta: 1)
-            }
-        })
-    }
-
     private func selectCurrent() {
+        // don't want to react while it's not the main view
+        guard isViewLoaded && view.window != nil else { return }
+
         if tableView.indexPathForSelectedRow == nil {
             tableView.selectRow(at: IndexPath(row: selectedIndex ?? 0, section: 0), animated: true, scrollPosition: .middle)
         }
@@ -129,7 +128,6 @@ class PeopleTableViewController: UITableViewController {
         if let selectedIndex = selectedIndex {
             newIndex = selectedIndex + delta
         } else {
-            print(tableView.contentOffset.y)
             if tableView.contentOffset.y <= 0 {
                 // already at top, go to next
                 print("already at top")
