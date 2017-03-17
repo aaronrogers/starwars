@@ -18,6 +18,7 @@
 		6C6172AF1E7A334F00B16B4C /* PersonViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6172AE1E7A334F00B16B4C /* PersonViewController.swift */; };
 		6C6172B11E7A576A00B16B4C /* PersonTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6172B01E7A576A00B16B4C /* PersonTableViewCell.swift */; };
 		6C6172B31E7AEB2D00B16B4C /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6172B21E7AEB2D00B16B4C /* Extensions.swift */; };
+		6CE4E3A01E7C2B7400DA3664 /* VolumeControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CE4E39F1E7C2B7400DA3664 /* VolumeControl.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +36,7 @@
 		6C6172AE1E7A334F00B16B4C /* PersonViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersonViewController.swift; sourceTree = "<group>"; };
 		6C6172B01E7A576A00B16B4C /* PersonTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersonTableViewCell.swift; sourceTree = "<group>"; };
 		6C6172B21E7AEB2D00B16B4C /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		6CE4E39F1E7C2B7400DA3664 /* VolumeControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VolumeControl.swift; sourceTree = "<group>"; };
 		6F8CC60ED548F6D01E5EC3F3 /* Pods-StarWars.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StarWars.debug.xcconfig"; path = "Pods/Target Support Files/Pods-StarWars/Pods-StarWars.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -82,6 +84,7 @@
 				6C6172AC1E79941E00B16B4C /* Person.swift */,
 				6C6172B01E7A576A00B16B4C /* PersonTableViewCell.swift */,
 				6C6172AE1E7A334F00B16B4C /* PersonViewController.swift */,
+				6CE4E39F1E7C2B7400DA3664 /* VolumeControl.swift */,
 			);
 			path = StarWars;
 			sourceTree = "<group>";
@@ -234,6 +237,7 @@
 				6C6172AD1E79941E00B16B4C /* Person.swift in Sources */,
 				6C6172971E7987C500B16B4C /* AppDelegate.swift in Sources */,
 				6C6172B31E7AEB2D00B16B4C /* Extensions.swift in Sources */,
+				6CE4E3A01E7C2B7400DA3664 /* VolumeControl.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

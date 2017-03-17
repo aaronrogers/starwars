@@ -8,11 +8,14 @@
 
 import UIKit
 import RealmSwift
+import AVFoundation
 
 class PeopleTableViewController: UITableViewController {
 
     var notificationToken: NotificationToken? = nil
     var people: Results<Person>!
+    var volumeControl: VolumeControl!
+    var selectedIndex: Int?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +28,14 @@ class PeopleTableViewController: UITableViewController {
         notificationToken = people.addNotificationBlock { [weak self] (changes: RealmCollectionChange) in
             self?.handleNotificationChanges(changes)
         }
+
+        volumeControl = VolumeControl()
+        volumeControl.watchForChange(volumeUp: { 
+            self.changeSelectedIndex(delta: -1)
+        }, volumeDown: {
+            self.changeSelectedIndex(delta: 1)
+        })
+
     }
 
     // MARK: - Table view data source
@@ -77,6 +88,36 @@ class PeopleTableViewController: UITableViewController {
             fatalError("\(error)")
             break
         }
+    }
+
+    func changeSelectedIndex(delta: Int) {
+        // don't want to react while it's not the main view
+        guard isViewLoaded && view.window != nil else { return }
+
+        var newIndex: Int
+
+        if let selectedIndex = selectedIndex {
+            newIndex = selectedIndex + delta
+        } else {
+            print(tableView.contentOffset.y)
+            if tableView.contentOffset.y <= 0 {
+                // already at top, go to next
+                print("already at top")
+                newIndex = 1
+            } else {
+                newIndex = 0
+            }
+        }
+
+        if newIndex > people.count - 1 {
+            newIndex = 0
+        } else if newIndex < 0 {
+            newIndex = people.count - 1
+        }
+
+
+        self.selectedIndex = newIndex
+        tableView.scrollToRow(at: IndexPath(row: newIndex, section: 0), at: .middle, animated: true)
     }
 
 }
