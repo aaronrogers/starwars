@@ -20,6 +20,7 @@ class PeopleTableViewController: UITableViewController {
     var notificationToken: NotificationToken? = nil
     var people: Results<Person>!
     var selectedIndex: Int?
+    private var feedback: UISelectionFeedbackGenerator!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,6 +40,7 @@ class PeopleTableViewController: UITableViewController {
 
         VolumeControl.shared.enable()
 
+        feedback = UISelectionFeedbackGenerator()
     }
 
     deinit {
@@ -122,6 +124,8 @@ class PeopleTableViewController: UITableViewController {
     func changeSelectedIndex(delta: Int) {
         // don't want to react while it's not the main view
         guard isViewLoaded && view.window != nil else { return }
+
+        feedback.selectionChanged()
 
         var newIndex: Int
 
